@@ -1,0 +1,24 @@
+steps to open mariadb
+
+~/.local/mariadb/bin/mariadbd-safe --datadir=$HOME/.local/mariadb/data --pid-file=$HOME/.local/mariadb/data/mariadb.pid --socket=$HOME/.local/mariadb/data/mariadb.sock --port=3307 &
+
+ps aux | grep mariadbd
+
+~/.local/mariadb/bin/mariadb --socket=$HOME/.local/mariadb/data/mariadb.sock -u atharvmscds
+
+MariaDB [(none)]>
+
+
+exit;
+
+
+
+
+chat link
+https://share.gemini.google/BdhqXdeff0E4
+
+
+
+export database file
+~/.local/mariadb/bin/mariadb-dump --socket=$HOME/.local/mariadb/data/mariadb.sock -u atharvmscds shopping > "$HOME/ATHARV KOCHAREKAR/mariadb/shopping-db.sql"
+
