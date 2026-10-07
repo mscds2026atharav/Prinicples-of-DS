@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadTracker App</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url("{{ url_for('static', filename='background2.avif') }}") no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            color: #0f172a;
+        }
+
+        /* Glass Floating Title Bar */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .dashboard-title {
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        /* Pure Glass Table Container */
+        .glass-table-container {
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* High-Contrast Table Styling */
+        .table-glass {
+            margin-bottom: 0;
+            color: #0f172a;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        /* Distinct BOLD Header Bar */
+        .table-glass thead tr {
+            background-color: #0f172a !important;
+        }
+
+        .table-glass th {
+            font-weight: 700 !important;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            padding: 16px 14px;
+            color: #ffffff !important;
+            border-bottom: 2px solid #0284c7;
+            border-top: none;
+            background-color: #0f172a !important;
+        }
+
+        .table-glass td {
+            padding: 14px 16px;
+            font-size: 0.875rem;
+            vertical-align: middle;
+            color: #1e293b !important;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .table-glass tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-glass tbody tr:hover td {
+            background: rgba(255, 255, 255, 0.65);
+            transition: background 0.2s ease;
+        }
+
+        /* Account ID Accent Color */
+        .account-id {
+            color: #0284c7 !important;
+            font-weight: 700;
+        }
+
+        /* Email Link Styling */
+        .email-link {
+            color: #2563eb !important;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .email-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Action Buttons */
+        .btn-action-edit {
+            background-color: #0284c7;
+            border: none;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-edit:hover {
+            background-color: #0369a1;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        }
+
+        .btn-action-delete {
+            background-color: #ef4444;
+            border: none;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-action-delete:hover {
+            background-color: #dc2626;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body class="p-3 p-md-5">
+
+    <div class="container-fluid px-0">
+        <!-- Header Container -->
+        <div class="glass-header p-4 mb-4 d-flex justify-content-between align-items-center">
+            <h2 class="dashboard-title m-0">Lead Tracker Dashboard</h2>
+            <span class="badge bg-dark text-white px-3 py-2 rounded-pill fw-bold">Total Leads: {{ leads|length }}</span>
+        </div>
+
+        <!-- Glass Table Container -->
+        <div class="glass-table-container">
+            <div class="table-responsive">
+                <table class="table table-glass">
+                    <thead>
+                        <tr>
+                            <th>Account ID</th>
+                            <th>Lead Owner</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Company</th>
+                            <th>Phone 1</th>
+                            <th>Phone 2</th>
+                            <th>Email 1</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lead in leads %}
+                        <tr>
+                            <td class="account-id">{{ lead['Account Id'] }}</td>
+                            <td class="fw-semibold">{{ lead['Lead Owner'] }}</td>
+                            <td class="fw-bold text-dark">{{ lead['First Name'] }}</td>
+                            <td class="fw-bold text-dark">{{ lead['Last Name'] }}</td>
+                            <td>{{ lead['Company'] }}</td>
+                            <td>{{ lead['Phone 1'] }}</td>
+                            <td>{{ lead['Phone 2'] }}</td>
+                            <td><a href="mailto:{{ lead['Email 1'] }}" class="email-link">{{ lead['Email 1'] }}</a></td>
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="button" class="btn btn-action-edit" data-bs-toggle="modal" data-bs-target="#editModal-{{ loop.index }}">
+                                        Edit
+                                    </button>
+                                    <form action="/delete/{{ lead['Account Id'] }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this lead?');">
+                                        <button type="submit" class="btn btn-action-delete">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals rendered outside the table element to work correctly -->
+    {% for lead in leads %}
+    <div class="modal fade" id="editModal-{{ loop.index }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-dark border-0 shadow-lg" style="border-radius: 16px;">
+                <form action="/edit/{{ lead['Account Id'] }}" method="POST">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold">Edit Lead Info</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body py-4">
+                        <p class="text-muted small mb-3">Account ID: <strong>{{ lead['Account Id'] }}</strong></p>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">First Name</label>
+                            <input type="text" name="first_name" class="form-control" value="{{ lead['First Name'] }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Last Name</label>
+                            <input type="text" name="last_name" class="form-control" value="{{ lead['Last Name'] }}" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
